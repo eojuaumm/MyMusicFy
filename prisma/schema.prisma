@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id       String   @id @default(uuid()) // ID agora é um texto longo único (UUID)
+  email    String   @unique
+  password String
+  nome     String?
+  imagem   String?
+  isPro     Boolean    @default(false)
+  musicas  Musica[] // Um usuário pode ter VÁRIAS músicas
+  playlists Playlist[]
+}
+
+model Musica {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  artista   String
+  album     String?
+  ano       Int?
+  capaUrl   String?
+  previewUrl String?
+  favorito   Boolean  @default(false)
+  criadoEm  DateTime @default(now())
+  
+  
+  userId    String?  
+  user      User?    @relation(fields: [userId], references: [id])
+
+  playlists Playlist[]
+}
+
+model Playlist {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  criadoEm  DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  musicas   Musica[] // As músicas que estão nesta playlist
+}

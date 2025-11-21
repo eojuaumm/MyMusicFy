@@ -1,0 +1,40 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { PlayerProvider } from "@/contexts/PlayerContext";
+import MusicPlayer from "@/components/MusicPlayer";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "MyMusicFy",
+  description: "MusicFy",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <PlayerProvider> 
+          {children}      {/* AQUI: A página carrega uma única vez */}
+          <MusicPlayer /> {/* O Player fica disponível globalmente */}
+        </PlayerProvider>
+        {/* O segundo {children} foi apagado daqui! */}
+      </body>
+    </html>
+  );
+}
