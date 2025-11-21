@@ -1,56 +1,55 @@
-import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import Navbar from "@/components/Navbar";
-import Link from "next/link";
-import Dashboard from "@/components/Dashboard"; 
+import { redirect } from "next/navigation";
+import Dashboard from "@/components/Dashboard";
+import { db } from "@/lib/db"; 
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  const musicas = session?.user 
-    ? await db.musica.findMany({
-        orderBy: { criadoEm: 'desc' },
-        include: { user: true }
-      }) 
-    : [];
+  if (!session?.user?.email) redirect("/login");
 
-  const playlists = session?.user
-    ? await db.playlist.findMany({ where: { user: { email: session.user.email } }, orderBy: { nome: 'asc' } })
-    : [];
+  // 1. Obter Playlists do Usuário
+  const playlists = await db.playlist.findMany({
+    where: { user: { email: session.user.email } },
+    select: {
+      id: true,
+      nome: true,
+      capaUrl: true,
+      musicas: {
+        select: { id: true } 
+      }
+    },
+    orderBy: { criadoEm: 'desc' }, 
+    take: 6, 
+  });
+
+  // 2. Obter TODAS AS MÚSICAS do usuário (Lista principal)
+  const musicasIniciais = await db.musica.findMany({
+    where: { userId: session.user.id },
+    select: {
+        id: true,
+        titulo: true,
+        artista: true,
+        capaUrl: true,
+        previewUrl: true,
+        favorito: true,
+        album: true,
+        ano: true,
+    },
+    orderBy: { criadoEm: 'desc' },
+  }) as any[];
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white selection:bg-blue-500/30">
+    <main className="min-h-screen bg-gray-950">
       <Navbar user={session?.user} />
-
-      {!session?.user ? (
-        
-        <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 text-center bg-gradient-to-b from-gray-900 to-gray-950 relative overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
-          <div className="relative z-10">
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 animate-fade-in">
-              O seu universo <br />
-              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Musical
-              </span>
-            </h1>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              Uma coleção inteligente. Nós encontramos as capas e o áudio para si.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/registrar" className="bg-white text-black font-bold py-3 px-8 rounded-full hover:scale-105 transition shadow-lg shadow-white/10">
-                Criar Minha Coleção
-              </Link>
-              <Link href="/login" className="border border-gray-700 text-gray-300 font-bold py-3 px-8 rounded-full hover:bg-gray-800 hover:text-white transition">
-                Aceder à Conta
-              </Link>
-            </div>
-          </div>
-        </div>
-      ) : (
-        
-        <Dashboard musicasIniciais={musicas} playlists={playlists} />
-      )}
+      {/* PASSAMOS PROPS DIRETAS */}
+      <Dashboard 
+        musicasIniciais={musicasIniciais} 
+        playlists={playlists} 
+        userInfo={session.user} 
+      />
     </main>
   );
 }

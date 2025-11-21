@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid()) // ID agora é um texto longo único (UUID)
+  id       String   @id @default(uuid())
   email    String   @unique
   password String
   nome     String?
   imagem   String?
   isPro     Boolean    @default(false)
-  musicas  Musica[] // Um usuário pode ter VÁRIAS músicas
+  musicas  Musica[]
   playlists Playlist[]
 }
 
@@ -39,10 +39,12 @@ model Musica {
 model Playlist {
   id        Int      @id @default(autoincrement())
   nome      String
+  descricao String?
+  capaUrl   String?
   criadoEm  DateTime @default(now())
   
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   
-  musicas   Musica[] // As músicas que estão nesta playlist
+  musicas   Musica[] 
 }

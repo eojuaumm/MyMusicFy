@@ -164,3 +164,25 @@ export async function alternarPlano(email: string) {
   revalidatePath("/");
   revalidatePath("/perfil");
 }
+
+export async function editarPlaylist(formData: FormData) {
+  
+  const id = parseInt(formData.get("id") as string);
+  const nome = formData.get("nome") as string;
+  const descricao = formData.get("descricao") as string;
+  const capaUrl = formData.get("capaUrl") as string;
+  
+  if (isNaN(id)) return;
+
+  await db.playlist.update({
+    where: { id },
+    data: {
+      nome,
+      descricao: descricao || null, 
+      capaUrl: capaUrl || null, // 
+    }
+  });
+
+  revalidatePath(`/playlists/${id}`);
+  revalidatePath("/playlists");
+}

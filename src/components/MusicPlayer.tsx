@@ -4,8 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import YouTube, { YouTubeEvent } from "react-youtube";
 import { usePlayer } from "@/contexts/PlayerContext";
 
-const PreviousIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 transform rotate-180"><path d="M9.195 18.44c1.25.713 2.805-.19 2.805-1.629v-2.958l3.225 2.864c1.286 1.114 3.275.206 3.275-1.52V8.942c0-1.726-1.99-2.634-3.275-1.52l-3.225 2.864V7.328c0-1.439-1.555-2.342-2.805-1.628L2.876 9.3a3.32 3.32 0 0 0 0 5.4l6.319 3.74Z" /></svg>;
-const NextIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 transform rotate-180"><path d="M9.195 18.44c1.25.713 2.805-.19 2.805-1.629v-2.958l3.225 2.864c1.286 1.114 3.275.206 3.275-1.52V8.942c0-1.726-1.99-2.634-3.275-1.52l-3.225 2.864V7.328c0-1.439-1.555-2.342-2.805-1.628L2.876 9.3a3.32 3.32 0 0 0 0 5.4l6.319 3.74Z" /></svg>;
+const SkipIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10"><path d="M9.195 18.44c1.25.713 2.805-.19 2.805-1.629v-2.958l3.225 2.864c1.286 1.114 3.275.206 3.275-1.52V8.942c0-1.726-1.99-2.634-3.275-1.52l-3.225 2.864V7.328c0-1.439-1.555-2.342-2.805-1.628L2.876 9.3a3.32 3.32 0 0 0 0 5.4l6.319 3.74Z" /></svg>;
 const PlayBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 ml-1"><path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" /></svg>;
 const PauseBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10"><path fillRule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25ZM14.25 5.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75V5.25Z" clipRule="evenodd" /></svg>;
 const VolumeLowIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06Z" /></svg>;
@@ -162,7 +161,7 @@ export default function MusicPlayer() {
               <div className="flex items-center gap-8">
                  {isExpanded && (
                     <button onClick={(e) => { e.stopPropagation(); musicaAnterior(); }} className="text-gray-400 hover:text-white transition hover:scale-110 active:scale-95">
-                      {PreviousIcon}
+                      {SkipIcon}
                     </button>
                  )}
 
@@ -172,7 +171,7 @@ export default function MusicPlayer() {
 
                 {isExpanded && (
                     <button onClick={(e) => { e.stopPropagation(); proximaMusica(); }} className="text-gray-400 hover:text-white transition hover:scale-110 active:scale-95">
-                      {NextIcon}
+                      <span className="transform rotate-180 block">{SkipIcon}</span>
                     </button>
                  )}
               </div>
