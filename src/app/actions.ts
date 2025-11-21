@@ -10,8 +10,7 @@ export async function buscarVideosYoutube(termo: string) {
   const apiKey = process.env.YOUTUBE_API_KEY;
   if (!apiKey) return [];
 
-  
-  const url = `https:
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${termo}&type=video&key=${apiKey}`;
   
   try {
     const res = await fetch(url);
@@ -25,7 +24,7 @@ export async function buscarVideosYoutube(termo: string) {
         canal: video.snippet.channelTitle, 
         capaUrl: video.snippet.thumbnails.high.url,
         ano: new Date(video.snippet.publishedAt).getFullYear(),
-        previewUrl: `https:
+        previewUrl: `https://www.youtube.com/embed/${video.id.videoId}`,
       }));
     }
   } catch (error) {

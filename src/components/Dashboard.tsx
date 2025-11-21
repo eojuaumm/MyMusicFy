@@ -6,6 +6,11 @@ import MusicModal from "./MusicModal";
 import { usePlayer } from "@/contexts/PlayerContext"; 
 
 
+const SearchIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.197 5.197a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>;
+const PlusIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>;
+const PlayCircleIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.02-1.203a.75.75 0 0 0 0-1.094l-4.5-3a.75.75 0 0 0-1.25.5v6a.75.75 0 0 0 1.25.5l4.5-3Z" clipRule="evenodd" /></svg>;
+
+
 type Musica = {
   id: number;
   titulo: string;
@@ -71,18 +76,18 @@ export default function Dashboard({ musicasIniciais, playlists = [] }: { musicas
   return (
     <div className="max-w-7xl mx-auto p-6 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-32">
       
-      {}
+      
       <div ref={searchContainerRef} className="max-w-3xl mx-auto mb-12 relative z-20">
         <form onSubmit={handleSearch} className="relative flex items-center">
-          {}
+          
           <div className="absolute left-4 text-gray-400">
-            <svg xmlns="http:
+            {SearchIcon}
           </div>
           <input type="text" value={termoBusca} onChange={(e) => setTermoBusca(e.target.value)} placeholder="O que queres ouvir hoje?" className="w-full bg-gray-900 border border-gray-700 rounded-full py-4 pl-12 pr-32 text-white text-lg focus:ring-2 focus:ring-blue-500 outline-none shadow-xl placeholder-gray-500 transition-all focus:bg-gray-800" />
           <button type="submit" disabled={isSearching || !termoBusca} className="absolute right-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-full transition disabled:opacity-50">{isSearching ? "..." : "Buscar"}</button>
         </form>
 
-        {}
+        
         {resultados.length > 0 && (
           <div className="absolute top-full left-0 w-full mt-4 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="p-3 max-h-[400px] overflow-y-auto custom-scrollbar">
@@ -94,7 +99,7 @@ export default function Dashboard({ musicasIniciais, playlists = [] }: { musicas
                     <p className="text-gray-400 text-xs truncate mt-1">{video.canal} • {video.ano}</p>
                   </div>
                   <div className="bg-gray-800 group-hover:bg-blue-600 text-gray-400 group-hover:text-white p-2 rounded-full transition">
-                    <svg xmlns="http:
+                    {PlusIcon}
                   </div>
                 </div>
               ))}
@@ -103,7 +108,7 @@ export default function Dashboard({ musicasIniciais, playlists = [] }: { musicas
         )}
       </div>
 
-      {}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {musicasIniciais.map((musica) => (
           <div 
@@ -111,12 +116,12 @@ export default function Dashboard({ musicasIniciais, playlists = [] }: { musicas
             onClick={() => setMusicaSelecionada(musica)}
             className="group bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300 relative cursor-pointer"
           >
-            {}
+            
             <div className="aspect-video w-full bg-gray-800 relative group-hover:scale-105 transition duration-500">
               {musica.capaUrl ? <img src={musica.capaUrl} alt={musica.titulo} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-4xl bg-gray-800">🎵</div>}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                  <div className="bg-blue-600 text-white p-3 rounded-full transform scale-0 group-hover:scale-100 transition duration-300 shadow-xl">
-                    <svg xmlns="http:
+                    {PlayCircleIcon}
                  </div>
               </div>
             </div>
@@ -138,7 +143,7 @@ export default function Dashboard({ musicasIniciais, playlists = [] }: { musicas
         />
       )}
 
-      {}
+      
 
     </div>
   );

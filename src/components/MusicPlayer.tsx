@@ -4,6 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import YouTube, { YouTubeEvent } from "react-youtube";
 import { usePlayer } from "@/contexts/PlayerContext";
 
+const PreviousIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>;
+const NextIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>;
+const PlayBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.38 2.831-1.664l9.75 5.485c1.133.636 1.133 2.29 0 2.925l-9.75 5.485C6.03 20.38 4.5 19.427 4.5 18.001V5.653Z" clipRule="evenodd" /></svg>;
+const PauseBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path fillRule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25ZM14.25 5.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75V5.25Z" clipRule="evenodd" /></svg>;
+const VolumeLowIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.642a4.48 4.48 0 0 1 0 7.916 22.81 22.81 0 0 1-5.3 4.214a1.12 1.12 0 0 1-1.272-1.026v-14.28a1.12 1.12 0 0 1 1.272-1.026c1.57-.464 3.197-.73 4.831-.768ZM9.109 17.5a30.08 30.08 0 0 1-5.858-4.908 1.12 1.12 0 0 1 0-1.684A30.08 30.08 0 0 1 9.11 6.5Z" /></svg>;
+const VolumeHighIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.642a4.48 4.48 0 0 1 0 7.916 22.81 22.81 0 0 1-5.3 4.214 1.12 1.12 0 0 1-1.272-1.026v-14.28a1.12 1.12 0 0 1 1.272-1.026c1.57-.464 3.197-.73 4.831-.768Zm-10.05 0a30.08 30.08 0 0 1-5.858-4.908 1.12 1.12 0 0 1 0-1.684A30.08 30.08 0 0 1 9.11 6.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9.75a3.75 3.75 0 1 0 0 4.5h.375c.703 0 1.378-.314 1.874-.854.155-.17.316-.347.485-.532A.752.752 0 0 1 21 12c0-.528-.184-1.037-.521-1.428-.169-.185-.33-.362-.485-.532A2.775 2.775 0 0 0 16.125 9.75h-.375Z" /></svg>;
+
+
 export default function MusicPlayer() {
   const { musicaTocando: musica, proximaMusica, musicaAnterior, fecharPlayer } = usePlayer();
 
@@ -101,7 +109,7 @@ export default function MusicPlayer() {
 
   return (
     <>
-      {}
+      
       <div style={{ position: 'fixed', top: '-10000px', opacity: 0 }}>
         <YouTube
           videoId={videoId}
@@ -155,26 +163,26 @@ export default function MusicPlayer() {
               <div className="flex items-center gap-8">
                  {isExpanded && (
                     <button onClick={(e) => { e.stopPropagation(); musicaAnterior(); }} className="text-gray-400 hover:text-white transition hover:scale-110 active:scale-95">
-                      <svg xmlns="http:
+                      {PreviousIcon}
                     </button>
                  )}
 
                 <button onClick={togglePlay} className={`bg-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition text-black shadow-lg shadow-white/20 ${isExpanded ? 'w-20 h-20' : 'w-10 h-10'}`}>
-                  {isPlaying ? <svg xmlns="http:
+                  {isPlaying ? PauseBigIcon : PlayBigIcon}
                 </button>
 
                 {isExpanded && (
                     <button onClick={(e) => { e.stopPropagation(); proximaMusica(); }} className="text-gray-400 hover:text-white transition hover:scale-110 active:scale-95">
-                      <svg xmlns="http:
+                      {NextIcon}
                     </button>
                  )}
               </div>
 
               {isExpanded && (
                 <div className="w-full flex items-center gap-4 bg-gray-800 p-4 rounded-2xl border border-gray-700 shadow-inner mt-4">
-                  <svg xmlns="http:
+                  {VolumeLowIcon}
                   <input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(parseInt(e.target.value))} onClick={(e) => e.stopPropagation()} className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-500" />
-                   <svg xmlns="http:
+                   {VolumeHighIcon}
                 </div>
               )}
 

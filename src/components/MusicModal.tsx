@@ -3,6 +3,9 @@
 import { removerMusica, toggleFavorito, adicionarMusicaNaPlaylist } from "@/app/actions";
 import { useState } from "react";
 
+const CloseIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>;
+const PlayIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.38 2.831-1.664l9.75 5.485c1.133.636 1.133 2.29 0 2.925l-9.75 5.485C6.03 20.38 4.5 19.427 4.5 18.001V5.653Z" clipRule="evenodd" /></svg>;
+
 interface MusicModalProps {
   musica: any;
   playlists: any[]; 
@@ -39,10 +42,10 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
       <div className="relative bg-gray-900 border border-gray-700 w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 animate-in zoom-in-95 duration-200">
         
         <button onClick={onClose} className="absolute top-3 right-3 text-white/50 hover:text-white z-10 bg-black/20 rounded-full p-1">
-          <svg xmlns="http:
+          {CloseIcon}
         </button>
 
-        {}
+        
         <div className="h-48 w-full bg-gray-800 relative">
           {musica.capaUrl ? <img src={musica.capaUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-6xl">🎵</div>}
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
@@ -52,11 +55,11 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
           <h2 className="text-xl font-bold text-white leading-tight truncate">{musica.titulo}</h2>
           <p className="text-blue-400 font-medium mb-6 truncate">{musica.artista}</p>
 
-          {}
+          
           {!showPlaylists ? (
             <div className="flex flex-col gap-3">
               <button onClick={() => { onPlay(); onClose(); }} className="w-full bg-white hover:bg-gray-200 text-black font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition">
-                <svg xmlns="http:
+                {PlayIcon}
                 Tocar Agora
               </button>
 

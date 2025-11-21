@@ -6,6 +6,12 @@ import Navbar from "@/components/Navbar";
 import { criarPlaylist, apagarPlaylist } from "../actions";
 import Link from "next/link";
 
+const DeleteIcon = (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+    <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+  </svg>
+);
+
 export default async function PlaylistsPage() {
   const session = await getServerSession(authOptions);
 
@@ -27,7 +33,7 @@ export default async function PlaylistsPage() {
           Minhas Playlists 📂
         </h1>
 
-        {}
+        
         <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl mb-8 shadow-lg">
           <h2 className="text-lg font-semibold mb-4">Criar Nova Playlist</h2>
           <form action={criarPlaylist} className="flex gap-4">
@@ -44,7 +50,7 @@ export default async function PlaylistsPage() {
           </form>
         </div>
 
-        {}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {playlists.map((playlist) => (
             <Link 
@@ -60,12 +66,10 @@ export default async function PlaylistsPage() {
                 {playlist._count.musicas} músicas
               </p>
 
-              {}
+              
               <form action={apagarPlaylist.bind(null, playlist.id)} className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition">
                 <button className="text-gray-500 hover:text-red-500 p-1">
-                  <svg xmlns="http:
-                    <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
-                  </svg>
+                  {DeleteIcon}
                 </button>
               </form>
             </Link>
