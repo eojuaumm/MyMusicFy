@@ -177,7 +177,7 @@ export default function MusicPlayer() {
               </div>
 
               {isExpanded && (
-                <div className="w-full flex items-center gap-4 bg-gray-800 p-4 rounded-2xl border border-gray-700 shadow-inner mt-4">
+                <div className="w-full flex items-center gap-4 bg-gray-800 p-4 rounded-2xl border border-gray-700 shadow-inner mt-0 self-start">
                   <div className="text-gray-400">
                     {VolumeLowIcon}
                   </div>

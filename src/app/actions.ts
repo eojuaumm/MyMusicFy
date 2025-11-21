@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { hash } from "bcryptjs";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 
 export async function buscarVideosYoutube(termo: string) {
@@ -35,6 +37,17 @@ export async function buscarVideosYoutube(termo: string) {
 
 
 export async function salvarMusicaEscolhida(video: any) {
+  const session = await getServerSession(authOptions);
+  
+  if (!session?.user?.email) return;
+  
+  const user = await db.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true }
+  });
+  
+  if (!user) return;
+  
   await db.musica.create({
     data: {
       titulo: video.titulo,
@@ -43,6 +56,7 @@ export async function salvarMusicaEscolhida(video: any) {
       ano: video.ano,
       capaUrl: video.capaUrl,
       previewUrl: video.previewUrl,
+      userId: user.id,
     },
   });
 

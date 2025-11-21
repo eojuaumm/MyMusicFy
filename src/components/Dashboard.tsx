@@ -91,16 +91,22 @@ export default function Dashboard({ musicasIniciais, playlists = [], userInfo }:
     setTermoBusca("");
   };
 
+  // Verificar se usuário está autenticado
+  const isAuthenticated = userInfo?.email;
+
   return (
     <div className="pt-8 pb-28 px-6 md:px-8 lg:px-10">
       <div className="max-w-7xl mx-auto">
         
-        {/* 1. SAUDAÇÃO DINÂMICA */}
-        <h1 className="text-white text-3xl md:text-5xl font-extrabold mb-10 pt-4">
-          {greeting}, {userInfo.name || 'Usuário'}!
-        </h1>
+        {/* 1. SAUDAÇÃO DINÂMICA (Apenas se autenticado) */}
+        {isAuthenticated && (
+          <h1 className="text-white text-3xl md:text-5xl font-extrabold mb-10 pt-4">
+            {greeting}, {userInfo.name || 'Usuário'}!
+          </h1>
+        )}
 
-        {/* 2. ÁREA DE BUSCA ANTIGA (Centralizada e Simples) */}
+        {/* 2. ÁREA DE BUSCA ANTIGA (Apenas se autenticado) */}
+        {isAuthenticated && (
         <div ref={searchContainerRef} className="max-w-xl mx-auto mb-12 relative z-20">
           <form onSubmit={handleSearch} className="relative flex items-center">
             <div className="absolute left-4 text-gray-400">
@@ -144,8 +150,11 @@ export default function Dashboard({ musicasIniciais, playlists = [], userInfo }:
             </div>
           )}
         </div>
+        )}
 
-        {/* 3. LISTA PRINCIPAL DE MÚSICAS (GRID ANTIGO) */}
+        {/* 3. LISTA PRINCIPAL DE MÚSICAS (Apenas se autenticado) */}
+        {isAuthenticated && (
+        <>
         <h2 className="text-white text-3xl font-bold mb-6">Sua Coleção</h2>
         
         {musicasIniciais.length === 0 ? (
@@ -185,6 +194,8 @@ export default function Dashboard({ musicasIniciais, playlists = [], userInfo }:
               </div>
             ))}
           </div>
+        )}
+        </>
         )}
 
       </div>
