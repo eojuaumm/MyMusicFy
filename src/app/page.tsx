@@ -8,7 +8,19 @@ import { db } from "@/lib/db";
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user?.email) redirect("/login");
+  if (!session?.user?.email) {
+    // Usuário não autenticado: renderiza versão pública sem forçar login
+    const playlists: any[] = [];
+    const musicasIniciais: any[] = [];
+    const userInfo = { name: 'Visitante' };
+
+    return (
+      <main className="min-h-screen bg-gray-950">
+        <Navbar user={null} />
+        <Dashboard musicasIniciais={musicasIniciais} playlists={playlists} userInfo={userInfo} />
+      </main>
+    );
+  }
 
   // 1. Obter Playlists do Usuário
   const playlists = await db.playlist.findMany({
@@ -18,11 +30,11 @@ export default async function Home() {
       nome: true,
       capaUrl: true,
       musicas: {
-        select: { id: true } 
+        select: { id: true }
       }
     },
-    orderBy: { criadoEm: 'desc' }, 
-    take: 6, 
+    orderBy: { criadoEm: 'desc' },
+    take: 6,
   });
 
   // 2. Obter TODAS AS MÚSICAS do usuário (Lista principal)
