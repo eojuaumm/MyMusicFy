@@ -4,12 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import YouTube, { YouTubeEvent } from "react-youtube";
 import { usePlayer } from "@/contexts/PlayerContext";
 
-const PreviousIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>;
-const NextIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>;
-const PlayBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.38 2.831-1.664l9.75 5.485c1.133.636 1.133 2.29 0 2.925l-9.75 5.485C6.03 20.38 4.5 19.427 4.5 18.001V5.653Z" clipRule="evenodd" /></svg>;
-const PauseBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path fillRule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25ZM14.25 5.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75V5.25Z" clipRule="evenodd" /></svg>;
-const VolumeLowIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.642a4.48 4.48 0 0 1 0 7.916 22.81 22.81 0 0 1-5.3 4.214a1.12 1.12 0 0 1-1.272-1.026v-14.28a1.12 1.12 0 0 1 1.272-1.026c1.57-.464 3.197-.73 4.831-.768ZM9.109 17.5a30.08 30.08 0 0 1-5.858-4.908 1.12 1.12 0 0 1 0-1.684A30.08 30.08 0 0 1 9.11 6.5Z" /></svg>;
-const VolumeHighIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.642a4.48 4.48 0 0 1 0 7.916 22.81 22.81 0 0 1-5.3 4.214 1.12 1.12 0 0 1-1.272-1.026v-14.28a1.12 1.12 0 0 1 1.272-1.026c1.57-.464 3.197-.73 4.831-.768Zm-10.05 0a30.08 30.08 0 0 1-5.858-4.908 1.12 1.12 0 0 1 0-1.684A30.08 30.08 0 0 1 9.11 6.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9.75a3.75 3.75 0 1 0 0 4.5h.375c.703 0 1.378-.314 1.874-.854.155-.17.316-.347.485-.532A.752.752 0 0 1 21 12c0-.528-.184-1.037-.521-1.428-.169-.185-.33-.362-.485-.532A2.775 2.775 0 0 0 16.125 9.75h-.375Z" /></svg>;
+const PreviousIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 transform rotate-180"><path d="M9.195 18.44c1.25.713 2.805-.19 2.805-1.629v-2.958l3.225 2.864c1.286 1.114 3.275.206 3.275-1.52V8.942c0-1.726-1.99-2.634-3.275-1.52l-3.225 2.864V7.328c0-1.439-1.555-2.342-2.805-1.628L2.876 9.3a3.32 3.32 0 0 0 0 5.4l6.319 3.74Z" /></svg>;
+const NextIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 transform rotate-180"><path d="M9.195 18.44c1.25.713 2.805-.19 2.805-1.629v-2.958l3.225 2.864c1.286 1.114 3.275.206 3.275-1.52V8.942c0-1.726-1.99-2.634-3.275-1.52l-3.225 2.864V7.328c0-1.439-1.555-2.342-2.805-1.628L2.876 9.3a3.32 3.32 0 0 0 0 5.4l6.319 3.74Z" /></svg>;
+const PlayBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 ml-1"><path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" /></svg>;
+const PauseBigIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10"><path fillRule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25ZM14.25 5.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1-.75-.75V5.25Z" clipRule="evenodd" /></svg>;
+const VolumeLowIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06Z" /></svg>;
+const VolumeHighIcon = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 1 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" /><path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" /></svg>;
 
 
 export default function MusicPlayer() {
@@ -104,7 +104,6 @@ export default function MusicPlayer() {
   };
 
   
-  
   if (!musica || !musica.previewUrl) return null;
 
   return (
@@ -180,9 +179,23 @@ export default function MusicPlayer() {
 
               {isExpanded && (
                 <div className="w-full flex items-center gap-4 bg-gray-800 p-4 rounded-2xl border border-gray-700 shadow-inner mt-4">
-                  {VolumeLowIcon}
-                  <input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(parseInt(e.target.value))} onClick={(e) => e.stopPropagation()} className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-500" />
-                   {VolumeHighIcon}
+                  <div className="text-gray-400">
+                    {VolumeLowIcon}
+                  </div>
+                  
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value={volume}
+                    onChange={(e) => setVolume(parseInt(e.target.value))}
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  />
+                   
+                   <div className="text-gray-400">
+                    {VolumeHighIcon}
+                  </div>
                 </div>
               )}
 
