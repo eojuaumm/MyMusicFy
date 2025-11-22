@@ -4,6 +4,9 @@ import { db } from "@/lib/db";
 import { compare } from "bcryptjs";
 
 export const authOptions: AuthOptions = {
+  // ADICIONADO: Define explicitamente o segredo
+  secret: process.env.NEXTAUTH_SECRET,
+  
   pages: {
     signIn: "/login",
   },

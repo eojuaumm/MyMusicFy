@@ -38,11 +38,14 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
 
       <div className="relative bg-gray-900 border border-gray-700 w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 animate-in zoom-in-95 duration-200">
         
+        {/* Botão Fechar Corrigido */}
         <button onClick={onClose} className="absolute top-3 right-3 text-white/50 hover:text-white z-10 bg-black/20 rounded-full p-1">
-          <svg xmlns="http:
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
         </button>
 
-        {}
+        {/* Capa */}
         <div className="h-48 w-full bg-gray-800 relative">
           {musica.capaUrl ? <img src={musica.capaUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-6xl">🎵</div>}
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
@@ -52,11 +55,14 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
           <h2 className="text-xl font-bold text-white leading-tight truncate">{musica.titulo}</h2>
           <p className="text-blue-400 font-medium mb-6 truncate">{musica.artista}</p>
 
-          {}
+          {/* Ações */}
           {!showPlaylists ? (
             <div className="flex flex-col gap-3">
+              {/* Botão Tocar Corrigido */}
               <button onClick={() => { onPlay(); onClose(); }} className="w-full bg-white hover:bg-gray-200 text-black font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition">
-                <svg xmlns="http:
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M4.5 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 0 1 0 1.971l-11.54 6.347a1.125 1.125 0 0 1-1.667-.985V5.653Z" clipRule="evenodd" />
+                </svg>
                 Tocar Agora
               </button>
 

@@ -8,7 +8,7 @@ export default function AboutDevModal({ onClose }: Props) {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       
-      {}
+      {/* Overlay */}
       <div className="absolute inset-0" onClick={onClose}></div>
 
       <div className="relative bg-gray-900 border border-gray-700 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden p-6 animate-in zoom-in-95">
@@ -23,9 +23,9 @@ export default function AboutDevModal({ onClose }: Props) {
           </div>
           <h2 className="text-2xl font-bold text-white">MyMusicFy v2.5</h2>
           
-          {}
+          {/* Link corrigido */}
           <a 
-            href="https:
+            href="https://instagram.com/eojuaumm"
             target="_blank" 
             rel="noopener noreferrer"
             className="text-gray-400 text-sm mt-1 hover:text-pink-500 transition cursor-pointer inline-block border-b border-transparent hover:border-pink-500"
@@ -39,7 +39,7 @@ export default function AboutDevModal({ onClose }: Props) {
         <div className="space-y-4">
           <div className="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50">
             <h3 className="font-bold text-blue-400 text-sm uppercase mb-2">Desenvolvedor</h3>
-            <p className="text-white">Criei essa merda de madrugada só pra descobrir mais sobre a ferramenta do Next ;)</p>
+            <p className="text-white">Criei essa app de madrugada só pra descobrir mais sobre a ferramenta do Next ;)</p>
           </div>
 
           <div className="bg-gray-800/50 p-4 rounded-xl border border-gray-700/50">

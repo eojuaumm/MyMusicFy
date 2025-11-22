@@ -35,24 +35,26 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-950 p-4">
+    <main className="min-h-screen flex items-center justify-center bg-gray-950 p-4 relative overflow-hidden selection:bg-blue-500/30">
       
-      {}
-      <div className="absolute w-full max-w-lg h-64 bg-purple-600/10 blur-[100px] rounded-full pointer-events-none" />
+      {/* Fundo (Glow Azul Intenso) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="relative w-full max-w-md bg-gray-900 p-8 rounded-2xl border border-gray-800 shadow-2xl">
+      <div className="relative w-full max-w-md bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-blue-500/20 shadow-2xl z-10">
         
         <div className="text-center mb-8">
-          <Link href="/" className="text-sm text-gray-500 hover:text-white transition mb-4 inline-block">
-            ← Voltar ao início
+          <Link href="/" className="text-sm text-gray-400 hover:text-white transition mb-6 inline-block flex items-center justify-center gap-2 group">
+            <span className="group-hover:-translate-x-1 transition">←</span> Voltar ao início
           </Link>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+          
+          {/* Título Azul/Ciano */}
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-gradient-text pb-2">
             Bem-vindo
           </h1>
-          <p className="text-gray-400 text-sm mt-2">Faça login para aceder à sua coleção</p>
+          <p className="text-gray-400 text-sm mt-2">Faça login para entrar na sua coleção</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm text-center animate-pulse">
@@ -61,25 +63,25 @@ export default function LoginPage() {
           )}
 
           <div>
-            <label className="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wider">Email</label>
+            <label className="block text-xs font-bold text-blue-400 uppercase mb-2 tracking-wider">Email</label>
             <input 
               name="email" 
               type="email" 
               required
-              className="w-full p-3 rounded-lg bg-gray-950 border border-gray-800 text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition placeholder-gray-700"
+              className="w-full p-3 rounded-xl bg-gray-950/50 border border-gray-800 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition placeholder-gray-700"
               placeholder="seu@email.com"
             />
           </div>
 
           <div>
             <div className="flex justify-between mb-2">
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Senha</label>
+              <label className="block text-xs font-bold text-blue-400 uppercase tracking-wider">Senha</label>
             </div>
             <input 
               name="password" 
               type="password" 
               required
-              className="w-full p-3 rounded-lg bg-gray-950 border border-gray-800 text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition placeholder-gray-700"
+              className="w-full p-3 rounded-xl bg-gray-950/50 border border-gray-800 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition placeholder-gray-700"
               placeholder="••••••••"
             />
           </div>
@@ -87,7 +89,7 @@ export default function LoginPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-purple-900/20 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-blue-900/20 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Entrando..." : "Entrar"}
           </button>
@@ -95,7 +97,7 @@ export default function LoginPage() {
 
         <div className="mt-8 pt-6 border-t border-gray-800 text-center">
           <p className="text-gray-400 text-sm">
-            Ainda não tem conta? <Link href="/registrar" className="text-purple-400 hover:text-purple-300 font-semibold hover:underline">Criar conta grátis</Link>
+            Ainda não tem conta? <Link href="/registrar" className="text-blue-400 hover:text-blue-300 font-semibold hover:underline">Criar conta grátis</Link>
           </p>
         </div>
 
