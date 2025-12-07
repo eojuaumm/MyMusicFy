@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import Navbar from "@/components/Navbar";
 import Dashboard from "@/components/Dashboard";
 import Link from "next/link";
+import Image from "next/image";
 import PlaylistEditButton from "@/components/PlaylistEditButton";
 import { redirect } from "next/navigation"; // Importante para proteger a rota
 
@@ -98,7 +99,13 @@ export default async function PlaylistDetalhePage({ params }: Props) {
             {/* Capa da Playlist */}
             <div className="group relative w-52 h-52 shrink-0 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-gray-800 flex items-center justify-center">
               {playlist.capa ? (
-                <img src={playlist.capa} alt={playlist.nome} className="w-full h-full object-cover" />
+                <Image 
+                  src={playlist.capa} 
+                  alt={playlist.nome} 
+                  fill
+                  className="object-cover"
+                  sizes="208px"
+                />
               ) : (
                 <span className="text-6xl">💿</span>
               )}

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from "react";
-import YouTube, { YouTubeEvent } from "react-youtube";
+import YouTube, { YouTubeEvent, YouTubePlayer } from "react-youtube";
+import Image from "next/image";
 import { usePlayer } from "@/contexts/PlayerContext";
 
 export default function MusicPlayer() {
@@ -14,7 +15,7 @@ export default function MusicPlayer() {
   const [duration, setDuration] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
   
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YouTubePlayer | null>(null);
 
   useEffect(() => {
     if (musica) {
@@ -79,9 +80,12 @@ export default function MusicPlayer() {
     setCurrentTime(parseFloat(e.target.value));
   };
   const handleSeekMouseDown = () => setIsSeeking(true);
-  const handleSeekMouseUp = (e: any) => {
-    const timeToSeek = parseFloat(e.target.value);
-    playerRef.current.seekTo(timeToSeek);
+  const handleSeekMouseUp = (e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
+    const target = e.currentTarget as HTMLInputElement;
+    const timeToSeek = parseFloat(target.value);
+    if (playerRef.current) {
+      playerRef.current.seekTo(timeToSeek);
+    }
     setIsSeeking(false);
   };
 
@@ -95,7 +99,7 @@ export default function MusicPlayer() {
 
   return (
     <>
-      <div style={{ position: 'fixed', top: '-10000px', opacity: 0 }}>
+      <div style={{ display: 'none' }}>
         <YouTube
           videoId={videoId}
           opts={{
@@ -128,7 +132,15 @@ export default function MusicPlayer() {
             
             <div className={`flex items-center gap-4 transition-all duration-500 ${isExpanded ? 'flex-col text-center' : ''}`}>
               {musica.capaUrl && (
-                <img src={musica.capaUrl} alt="Capa" className={`rounded-lg shadow-lg transition-all duration-500 object-cover ${isExpanded ? 'w-64 h-64 shadow-2xl' : 'w-12 h-12'} ${isPlaying ? 'animate-pulse-slow' : ''}`} />
+                <div className={`relative rounded-lg shadow-lg transition-all duration-500 overflow-hidden ${isExpanded ? 'w-64 h-64 shadow-2xl' : 'w-12 h-12'} ${isPlaying ? 'animate-pulse-slow' : ''}`}>
+                  <Image 
+                    src={musica.capaUrl} 
+                    alt="Capa" 
+                    fill
+                    className="object-cover"
+                    sizes={isExpanded ? "256px" : "48px"}
+                  />
+                </div>
               )}
               <div>
                 <h4 className={`text-white font-bold transition-all ${isExpanded ? 'text-2xl' : 'text-sm'}`}>{musica.titulo}</h4>

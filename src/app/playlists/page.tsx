@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { criarPlaylist } from "../actions"; // Removido 'apagarPlaylist'
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function PlaylistsPage() {
   const session = await getServerSession(authOptions);
@@ -63,9 +64,15 @@ export default async function PlaylistsPage() {
               className="group relative bg-gray-900/40 border border-white/5 hover:border-purple-500/50 p-5 rounded-2xl transition-all duration-300 hover:bg-gray-800/60 hover:shadow-2xl hover:shadow-purple-500/10 hover:-translate-y-1 block"
             >
               {/* Capa da Playlist (Placeholder) */}
-              <div className="aspect-square w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center mb-4 group-hover:scale-105 transition duration-500 shadow-inner border border-white/5">
+              <div className="aspect-square w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center mb-4 group-hover:scale-105 transition duration-500 shadow-inner border border-white/5 overflow-hidden relative">
                 {playlist.capa ? (
-                  <img src={playlist.capa} alt={playlist.nome} className="w-full h-full object-cover rounded-xl" />
+                  <Image 
+                    src={playlist.capa} 
+                    alt={playlist.nome} 
+                    fill
+                    className="object-cover rounded-xl"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  />
                 ) : (
                   <span className="text-5xl group-hover:scale-110 transition transform duration-300 drop-shadow-lg">💿</span>
                 )}

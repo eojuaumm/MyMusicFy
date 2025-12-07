@@ -3,7 +3,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
-
+import Image from "next/image";
 import { atualizarPerfil, alternarPlano } from "../actions";
 
 export default async function PerfilPage() {
@@ -36,7 +36,13 @@ export default async function PerfilPage() {
           <div className="flex justify-center mb-8">
             <div className="w-32 h-32 rounded-full border-4 border-blue-500/30 overflow-hidden bg-gray-800 flex items-center justify-center relative group">
               {usuario.imagem ? (
-                <img src={usuario.imagem} alt="Foto de perfil" className="w-full h-full object-cover" />
+                <Image 
+                  src={usuario.imagem} 
+                  alt="Foto de perfil" 
+                  fill
+                  className="object-cover"
+                  sizes="128px"
+                />
               ) : (
                 <span className="text-4xl font-bold text-gray-600">{usuario.nome?.charAt(0).toUpperCase()}</span>
               )}

@@ -4,37 +4,20 @@ import { useState, useRef, useEffect } from "react";
 import { buscarVideosYoutube, salvarMusicaEscolhida } from "@/app/actions";
 import MusicModal from "./MusicModal";
 import { usePlayer } from "@/contexts/PlayerContext"; 
-import Link from "next/link"; 
-
-type Musica = {
-  id: number;
-  titulo: string;
-  artista: string;
-  album: string | null;
-  ano: number | null;
-  capaUrl: string | null;
-  previewUrl: string | null;
-  favorito: boolean;
-  user?: { nome: string | null } | null;
-};
-
-type ResultadoBusca = {
-  id: string;
-  titulo: string;
-  canal: string;
-  capaUrl: string;
-  previewUrl: string;
-  ano: number;
-};
+import Link from "next/link";
+import Image from "next/image";
+import type { Musica, Playlist, ResultadoBusca } from "@/types";
+import { toast } from "sonner";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function Dashboard({ 
   musicasIniciais, 
   playlists = [], 
   allowSearch = true,
-  allowFilters = true // NOVA PROPRIEDADE (Padrão: true)
+  allowFilters = true
 }: { 
   musicasIniciais: Musica[], 
-  playlists?: any[],
+  playlists?: Playlist[],
   allowSearch?: boolean,
   allowFilters?: boolean
 }) {
@@ -59,22 +42,56 @@ export default function Dashboard({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Debounced search para busca em tempo real
+  const debouncedSearch = useDebouncedCallback(
+    async (termo: string) => {
+      if (!termo.trim()) {
+        setResultados([]);
+        return;
+      }
+      setIsSearching(true);
+      try {
+        const videos = await buscarVideosYoutube(termo);
+        setResultados(videos);
+        if (videos.length === 0) {
+          toast.info("Nenhum resultado encontrado");
+        }
+      } catch (error) {
+        console.error("Erro na busca:", error);
+        toast.error("Erro ao buscar músicas. Tente novamente.");
+      } finally {
+        setIsSearching(false);
+      }
+    },
+    500 // 500ms de delay
+  );
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!termoBusca.trim()) return;
-    setIsSearching(true);
-    setResultados([]);
-    const videos = await buscarVideosYoutube(termoBusca);
-    setResultados(videos);
-    setIsSearching(false);
+    await debouncedSearch(termoBusca);
   };
 
   const handleSelectVideo = async (video: ResultadoBusca) => {
     setIsSaving(true);
-    await salvarMusicaEscolhida(video);
-    setIsSaving(false);
-    setResultados([]);
-    setTermoBusca("");
+    try {
+      const result = await salvarMusicaEscolhida(video);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Música adicionada com sucesso!", {
+          description: video.titulo,
+        });
+        // Sucesso - limpar busca
+        setResultados([]);
+        setTermoBusca("");
+      }
+    } catch (error) {
+      console.error("Erro ao salvar música:", error);
+      toast.error("Erro ao adicionar música. Tente novamente.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleShuffle = () => {
@@ -109,16 +126,26 @@ export default function Dashboard({
             <input 
               type="text" 
               value={termoBusca} 
-              onChange={(e) => setTermoBusca(e.target.value)} 
+              onChange={(e) => {
+                setTermoBusca(e.target.value);
+                debouncedSearch(e.target.value);
+              }}
               placeholder="O que queres ouvir hoje?" 
               className="w-full bg-gray-900 border border-gray-700 rounded-full py-4 pl-12 pr-32 text-white text-lg focus:ring-2 focus:ring-blue-500 outline-none shadow-xl placeholder-gray-500 transition-all focus:bg-gray-800" 
             />
             <button 
               type="submit" 
-              disabled={isSearching || !termoBusca} 
-              className="absolute right-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-full transition disabled:opacity-50"
+              disabled={isSearching || !termoBusca.trim()} 
+              className="absolute right-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-full transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              {isSearching ? "..." : "Buscar"}
+              {isSearching ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="hidden sm:inline">Buscando...</span>
+                </>
+              ) : (
+                "Buscar"
+              )}
             </button>
           </form>
 
@@ -126,16 +153,31 @@ export default function Dashboard({
             <div className="absolute top-full left-0 w-full mt-4 bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
               <div className="p-3 max-h-[400px] overflow-y-auto custom-scrollbar">
                 {resultados.map((video) => (
-                  <div key={video.id} onClick={() => handleSelectVideo(video)} className="flex items-center gap-4 p-3 hover:bg-gray-800 rounded-xl cursor-pointer transition group border-b border-gray-800 last:border-0">
-                    <img src={video.capaUrl} alt={video.titulo} className="w-24 h-14 object-cover rounded-lg shadow-sm group-hover:scale-105 transition" />
+                  <div 
+                    key={video.id} 
+                    onClick={() => handleSelectVideo(video)} 
+                    className="flex items-center gap-4 p-3 hover:bg-gray-800 rounded-xl cursor-pointer transition group border-b border-gray-800 last:border-0"
+                  >
+                    <Image 
+                      src={video.capaUrl} 
+                      alt={video.titulo} 
+                      width={96}
+                      height={56}
+                      className="w-24 h-14 object-cover rounded-lg shadow-sm group-hover:scale-105 transition"
+                      unoptimized
+                    />
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-white font-medium truncate text-sm" dangerouslySetInnerHTML={{__html: video.titulo}} />
+                      <h4 className="text-white font-medium truncate text-sm">{video.titulo}</h4>
                       <p className="text-gray-400 text-xs truncate mt-1">{video.canal} • {video.ano}</p>
                     </div>
-                    <div className="bg-gray-800 group-hover:bg-blue-600 text-gray-400 group-hover:text-white p-2 rounded-full transition">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                      </svg>
+                    <div className={`bg-gray-800 group-hover:bg-blue-600 text-gray-400 group-hover:text-white p-2 rounded-full transition ${isSaving ? 'opacity-50 cursor-wait' : ''}`}>
+                      {isSaving ? (
+                        <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -209,8 +251,18 @@ export default function Dashboard({
             onClick={() => setMusicaSelecionada(musica)}
             className="group bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-300 relative cursor-pointer"
           >
-            <div className="aspect-video w-full bg-gray-800 relative group-hover:scale-105 transition duration-500">
-              {musica.capaUrl ? <img src={musica.capaUrl} alt={musica.titulo} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-4xl bg-gray-800">🎵</div>}
+            <div className="aspect-video w-full bg-gray-800 relative group-hover:scale-105 transition duration-500 overflow-hidden">
+              {musica.capaUrl ? (
+                <Image 
+                  src={musica.capaUrl} 
+                  alt={musica.titulo} 
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-4xl bg-gray-800">🎵</div>
+              )}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                  <div className="bg-blue-600 text-white p-3 rounded-full transform scale-0 group-hover:scale-100 transition duration-300 shadow-xl">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">

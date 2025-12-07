@@ -2,34 +2,73 @@
 
 import { removerMusica, toggleFavorito, adicionarMusicaNaPlaylist } from "@/app/actions";
 import { useState } from "react";
+import Image from "next/image";
+import type { Musica, Playlist } from "@/types";
+import { toast } from "sonner";
+import ConfirmDialog from "./ConfirmDialog";
 
 interface MusicModalProps {
-  musica: any;
-  playlists: any[]; 
+  musica: Musica;
+  playlists: Playlist[]; 
   onClose: () => void;
   onPlay: () => void;
 }
 
 export default function MusicModal({ musica, playlists, onClose, onPlay }: MusicModalProps) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showPlaylists, setShowPlaylists] = useState(false); 
+  const [showPlaylists, setShowPlaylists] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [isAddingToPlaylist, setIsAddingToPlaylist] = useState<number | null>(null);
 
   async function handleDelete() {
-    if (confirm("Tem certeza que quer apagar esta música?")) {
-      setIsDeleting(true);
+    setIsDeleting(true);
+    try {
       await removerMusica(musica.id);
+      toast.success("Música removida com sucesso!");
       onClose();
+    } catch (error) {
+      console.error("Erro ao remover música:", error);
+      toast.error("Erro ao remover música. Tente novamente.");
+    } finally {
+      setIsDeleting(false);
+      setShowConfirmDelete(false);
     }
   }
 
   async function handleFavorite() {
-    await toggleFavorito(musica.id);
+    try {
+      await toggleFavorito(musica.id);
+      toast.success(
+        musica.favorito ? "Removido dos favoritos" : "Adicionado aos favoritos",
+        {
+          description: musica.titulo,
+        }
+      );
+    } catch (error) {
+      console.error("Erro ao favoritar música:", error);
+      toast.error("Erro ao atualizar favorito. Tente novamente.");
+    }
   }
 
   async function handleAddToPlaylist(playlistId: number) {
-    await adicionarMusicaNaPlaylist(musica.id, playlistId);
-    alert("Música adicionada com sucesso!");
-    onClose();
+    setIsAddingToPlaylist(playlistId);
+    try {
+      const result = await adicionarMusicaNaPlaylist(musica.id, playlistId);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        const playlist = playlists.find(p => p.id === playlistId);
+        toast.success("Música adicionada à playlist!", {
+          description: playlist?.nome || "Playlist",
+        });
+        onClose();
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar música na playlist:", error);
+      toast.error("Erro ao adicionar música na playlist. Tente novamente.");
+    } finally {
+      setIsAddingToPlaylist(null);
+    }
   }
 
   return (
@@ -46,8 +85,18 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
         </button>
 
         {/* Capa */}
-        <div className="h-48 w-full bg-gray-800 relative">
-          {musica.capaUrl ? <img src={musica.capaUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-6xl">🎵</div>}
+        <div className="h-48 w-full bg-gray-800 relative overflow-hidden">
+          {musica.capaUrl ? (
+            <Image 
+              src={musica.capaUrl} 
+              alt={musica.titulo}
+              fill
+              className="object-cover"
+              sizes="384px"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-6xl">🎵</div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
         </div>
 
@@ -74,8 +123,21 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
                 <button onClick={handleFavorite} className={`flex-1 py-3 rounded-xl font-bold border transition flex items-center justify-center gap-2 ${musica.favorito ? 'bg-pink-600/20 border-pink-600 text-pink-500' : 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700'}`}>
                   {musica.favorito ? '❤️' : '🤍'} Favoritar
                 </button>
-                <button onClick={handleDelete} disabled={isDeleting} className="flex-1 bg-gray-800 hover:bg-red-900/30 border border-gray-700 hover:border-red-500 text-gray-300 hover:text-red-400 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
-                  🗑️ Apagar
+                <button 
+                  onClick={() => setShowConfirmDelete(true)} 
+                  disabled={isDeleting} 
+                  className="flex-1 bg-gray-800 hover:bg-red-900/30 border border-gray-700 hover:border-red-500 text-gray-300 hover:text-red-400 font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isDeleting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
+                      <span>Removendo...</span>
+                    </>
+                  ) : (
+                    <>
+                      🗑️ Apagar
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -94,10 +156,20 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
                   <button 
                     key={p.id}
                     onClick={() => handleAddToPlaylist(p.id)}
-                    className="text-left p-3 bg-gray-800 hover:bg-blue-600 rounded-lg text-white transition flex items-center gap-3"
+                    disabled={isAddingToPlaylist === p.id}
+                    className="text-left p-3 bg-gray-800 hover:bg-blue-600 rounded-lg text-white transition flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span>💿</span>
-                    {p.nome}
+                    {isAddingToPlaylist === p.id ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Adicionando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>💿</span>
+                        {p.nome}
+                      </>
+                    )}
                   </button>
                 ))}
               </div>
@@ -106,6 +178,18 @@ export default function MusicModal({ musica, playlists, onClose, onPlay }: Music
 
         </div>
       </div>
+
+      {/* Modal de Confirmação de Exclusão */}
+      <ConfirmDialog
+        isOpen={showConfirmDelete}
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirmDelete(false)}
+        title="Confirmar Exclusão"
+        message={`Tem certeza que deseja remover "${musica.titulo}" da sua coleção? Esta ação não pode ser desfeita.`}
+        confirmText="Sim, remover"
+        cancelText="Cancelar"
+        variant="danger"
+      />
     </div>
   );
 }

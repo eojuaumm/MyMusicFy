@@ -1,18 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, ReactNode } from "react";
-
-type Musica = {
-  id: number;
-  titulo: string;
-  artista: string;
-  album: string | null;
-  ano: number | null;
-  capaUrl: string | null;
-  previewUrl: string | null;
-  favorito: boolean;
-  user?: { nome: string | null } | null;
-};
+import type { Musica } from "@/types";
 
 interface PlayerContextType {
   musicaTocando: Musica | null;

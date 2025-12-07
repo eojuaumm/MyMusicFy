@@ -1,6 +1,7 @@
 'use client'
 
 import Link from "next/link";
+import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react"; 
 import AboutDevModal from "./AboutDevModal"; 
@@ -120,9 +121,15 @@ export default function Navbar({ user }: NavbarProps) {
                     <p className="text-[10px] text-gray-500 uppercase tracking-wider group-hover:text-gray-400">Menu</p>
                   </div>
                   
-                  <div className={`h-10 w-10 rounded-full bg-gray-800 border-2 overflow-hidden transition-all shadow-md ${isMenuOpen ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-white/10 group-hover:border-blue-500/50'}`}>
+                  <div className={`h-10 w-10 rounded-full bg-gray-800 border-2 overflow-hidden transition-all shadow-md relative ${isMenuOpen ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-white/10 group-hover:border-blue-500/50'}`}>
                     {user.image ? (
-                       <img src={user.image} alt="Avatar" className="h-full w-full object-cover" />
+                       <Image 
+                         src={user.image} 
+                         alt="Avatar" 
+                         fill
+                         className="object-cover"
+                         sizes="40px"
+                       />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center text-gray-400 font-bold bg-gradient-to-br from-gray-800 to-gray-700">
                         {user.name?.charAt(0).toUpperCase()}
