@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next"; // Adicionei 'Viewport' aqui
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PlayerProvider } from "@/contexts/PlayerContext";
@@ -16,7 +16,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 1. A NOVA exportação separada para Viewport
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -27,7 +26,6 @@ export const viewport: Viewport = {
   ],
 };
 
-// 2. A exportação Metadata (sem o bloco viewport dentro)
 export const metadata: Metadata = {
   title: {
     default: "MyMusicFy - Sua música sem limites",

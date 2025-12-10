@@ -1,6 +1,5 @@
 'use client'
 
-// Skeleton loader para cards de música
 export function MusicCardSkeleton() {
   return (
     <div className="animate-pulse bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
@@ -13,7 +12,6 @@ export function MusicCardSkeleton() {
   );
 }
 
-// Skeleton loader para lista de resultados de busca
 export function SearchResultSkeleton() {
   return (
     <div className="animate-pulse flex items-center gap-4 p-3 border-b border-gray-800">
@@ -27,7 +25,6 @@ export function SearchResultSkeleton() {
   );
 }
 
-// Skeleton loader para grid de músicas
 export function MusicGridSkeleton({ count = 8 }: { count?: number }) {
   return (
     <>

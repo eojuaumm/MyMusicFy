@@ -62,17 +62,14 @@ export default function ConfirmDialog({
         className="relative bg-gray-900 border border-gray-700 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all scale-100 animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className={`p-6 border-b ${styles.border}`}>
           <h3 className="text-xl font-bold text-white">{title}</h3>
         </div>
 
-        {/* Body */}
         <div className="p-6">
           <p className="text-gray-300 leading-relaxed">{message}</p>
         </div>
 
-        {/* Footer */}
         <div className="flex gap-3 p-6 border-t border-gray-800">
           <button
             onClick={onCancel}

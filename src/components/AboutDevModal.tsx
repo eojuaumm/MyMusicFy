@@ -8,7 +8,6 @@ export default function AboutDevModal({ onClose }: Props) {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       
-      {/* Overlay */}
       <div className="absolute inset-0" onClick={onClose}></div>
 
       <div className="relative bg-gray-900 border border-gray-700 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden p-6 animate-in zoom-in-95">
@@ -23,7 +22,6 @@ export default function AboutDevModal({ onClose }: Props) {
           </div>
           <h2 className="text-2xl font-bold text-white">MyMusicFy v2.5</h2>
           
-          {/* Link corrigido */}
           <a 
             href="https://instagram.com/eojuaumm"
             target="_blank" 

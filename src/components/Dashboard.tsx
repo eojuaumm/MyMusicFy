@@ -42,7 +42,6 @@ export default function Dashboard({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Debounced search para busca em tempo real
   const debouncedSearch = useDebouncedCallback(
     async (termo: string) => {
       if (!termo.trim()) {
@@ -63,7 +62,7 @@ export default function Dashboard({
         setIsSearching(false);
       }
     },
-    500 // 500ms de delay
+    500
   );
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -82,7 +81,6 @@ export default function Dashboard({
         toast.success("Música adicionada com sucesso!", {
           description: video.titulo,
         });
-        // Sucesso - limpar busca
         setResultados([]);
         setTermoBusca("");
       }
@@ -113,7 +111,6 @@ export default function Dashboard({
   return (
     <div className="max-w-7xl mx-auto p-6 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-32">
       
-      {/* Barra de Pesquisa - Controlada por allowSearch */}
       {allowSearch && (
         <div ref={searchContainerRef} className="max-w-3xl mx-auto mb-8 relative z-20">
           <form onSubmit={handleSearch} className="relative flex items-center">
@@ -187,7 +184,6 @@ export default function Dashboard({
         </div>
       )}
 
-      {/* Barra de Ações Rápidas - Controlada por allowFilters */}
       {allowFilters && (
         <div className="flex flex-wrap gap-3 mb-8 justify-center animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100">
           
@@ -233,7 +229,6 @@ export default function Dashboard({
         </div>
       )}
 
-      {/* Lista de Músicas (Grid) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {musicasExibidas.length === 0 && (
            <div className="col-span-full text-center py-12 text-gray-500">

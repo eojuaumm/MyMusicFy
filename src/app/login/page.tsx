@@ -37,7 +37,6 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-950 p-4 relative overflow-hidden selection:bg-blue-500/30">
       
-      {/* Fundo (Glow Azul Intenso) */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative w-full max-w-md bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-blue-500/20 shadow-2xl z-10">
@@ -47,7 +46,6 @@ export default function LoginPage() {
             <span className="group-hover:-translate-x-1 transition">←</span> Voltar ao início
           </Link>
           
-          {/* Título Azul/Ciano */}
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-gradient-text pb-2">
             Bem-vindo
           </h1>

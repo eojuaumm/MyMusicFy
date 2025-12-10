@@ -6,7 +6,7 @@ import Dashboard from "@/components/Dashboard";
 import Link from "next/link";
 import Image from "next/image";
 import PlaylistEditButton from "@/components/PlaylistEditButton";
-import { redirect } from "next/navigation"; // Importante para proteger a rota
+import { redirect } from "next/navigation";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -15,7 +15,6 @@ interface Props {
 export default async function PlaylistDetalhePage({ params }: Props) {
   const session = await getServerSession(authOptions);
   
-  // 1. Segurança: Se não estiver logado, redireciona para o login imediatamente
   if (!session?.user?.email) {
     redirect("/login");
   }
@@ -31,17 +30,14 @@ export default async function PlaylistDetalhePage({ params }: Props) {
     );
   }
   
-  // 2. Segurança: Alterámos de findUnique para findFirst
-  // Agora procuramos pelo ID DA PLAYLIST **E** pelo EMAIL DO UTILIZADOR
   const playlist = await db.playlist.findFirst({
     where: { 
       id: playlistId,
-      user: { email: session.user.email } // Garante que só o dono acede
+      user: { email: session.user.email }
     },
     include: { musicas: true } 
   });
 
-  // Se a playlist existir mas for de outra pessoa, 'playlist' será null aqui
   if (!playlist) {
     return (
       <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center flex-col gap-4">
@@ -62,7 +58,6 @@ export default async function PlaylistDetalhePage({ params }: Props) {
   return (
     <main className="min-h-screen bg-gray-950 text-white selection:bg-purple-500/30 relative">
       
-      {/* Fundo com a Capa (Desfocado) */}
       <div className="fixed inset-0 z-0">
         {playlist.capa ? (
           <div 
@@ -80,7 +75,6 @@ export default async function PlaylistDetalhePage({ params }: Props) {
         
         <div className="max-w-7xl mx-auto px-6 pt-10">
           
-          {/* Botão Voltar */}
           <div className="mb-8">
             <Link 
               href="/playlists" 
@@ -93,10 +87,8 @@ export default async function PlaylistDetalhePage({ params }: Props) {
             </Link>
           </div>
 
-          {/* Cabeçalho da Playlist */}
           <div className="flex flex-col md:flex-row items-end gap-8 mb-12">
             
-            {/* Capa da Playlist */}
             <div className="group relative w-52 h-52 shrink-0 rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-gray-800 flex items-center justify-center">
               {playlist.capa ? (
                 <Image 
@@ -111,7 +103,6 @@ export default async function PlaylistDetalhePage({ params }: Props) {
               )}
             </div>
 
-            {/* Informações */}
             <div className="flex-1 w-full">
               <div className="flex justify-between items-start">
                 <div>
@@ -124,7 +115,6 @@ export default async function PlaylistDetalhePage({ params }: Props) {
                   </p>
                 </div>
                 
-                {/* Botão de Editar */}
                 <PlaylistEditButton playlist={playlist} />
               </div>
 
@@ -141,7 +131,6 @@ export default async function PlaylistDetalhePage({ params }: Props) {
             </div>
           </div>
 
-          {/* Lista de Músicas */}
           <Dashboard 
             musicasIniciais={playlist.musicas} 
             playlists={userPlaylists} 

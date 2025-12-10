@@ -20,7 +20,6 @@ export default function Navbar({ user }: NavbarProps) {
   const [showAboutModal, setShowAboutModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Fechar menu ao clicar fora
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -31,7 +30,6 @@ export default function Navbar({ user }: NavbarProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Lista de botões de navegação
   const navLinks = [
     { 
       name: "Início", 
@@ -44,7 +42,7 @@ export default function Navbar({ user }: NavbarProps) {
     },
     { 
       name: "Explorar", 
-      href: "/explorar", // ATUALIZADO AQUI: Link para a nova página
+      href: "/explorar",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
@@ -64,10 +62,8 @@ export default function Navbar({ user }: NavbarProps) {
 
   return (
     <>
-      {/* Navbar Fixa com Efeito Vidro */}
       <nav className="fixed top-0 left-0 w-full h-20 flex justify-between items-center px-6 z-50 bg-black/50 backdrop-blur-xl border-b border-white/10 shadow-lg">
         
-        {/* Logo Estático (Não Clicável) com Animação de Cor */}
         <div className="flex items-center gap-3 select-none cursor-default">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-900/20">
             M
@@ -77,7 +73,6 @@ export default function Navbar({ user }: NavbarProps) {
           </span>
         </div>
 
-        {/* Botões de Navegação Centrais (Apenas visíveis se logado e em telas maiores) */}
         {user && (
           <div className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 bg-white/5 border border-white/5 rounded-full p-1 backdrop-blur-md">
             {navLinks.map((link) => (
@@ -97,7 +92,6 @@ export default function Navbar({ user }: NavbarProps) {
           {user ? (
             <div className="flex items-center gap-4">
               
-              {/* Mobile: Botão Biblioteca (ícone apenas) */}
               <Link 
                 href="/playlists" 
                 className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition"
@@ -109,7 +103,6 @@ export default function Navbar({ user }: NavbarProps) {
 
               <div className="h-6 w-[1px] bg-white/10 hidden sm:block"></div>
 
-              {/* Menu do Usuário */}
               <div className="relative" ref={menuRef}>
                 
                 <button 
@@ -138,11 +131,9 @@ export default function Navbar({ user }: NavbarProps) {
                   </div>
                 </button>
 
-                {/* Dropdown Menu */}
                 {isMenuOpen && (
                   <div className="absolute right-0 top-full mt-4 w-64 bg-gray-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-top-2 fade-in duration-200 z-50">
                     
-                    {/* Header do Menu */}
                     <div className="p-4 border-b border-white/5 bg-white/5">
                       <p className="text-white font-bold truncate">{user.name}</p>
                       <p className="text-xs text-gray-400 truncate mb-3">{user.email}</p>
@@ -158,7 +149,6 @@ export default function Navbar({ user }: NavbarProps) {
                       )}
                     </div>
 
-                    {/* Opções */}
                     <div className="p-2 flex flex-col gap-1">
                       <Link 
                         href="/perfil" 
@@ -184,7 +174,6 @@ export default function Navbar({ user }: NavbarProps) {
 
                     <div className="h-[1px] bg-white/10 my-1 mx-2"></div>
 
-                    {/* Sair */}
                     <div className="p-2">
                       <button 
                         onClick={() => signOut()}
@@ -211,7 +200,6 @@ export default function Navbar({ user }: NavbarProps) {
         </div>
       </nav>
 
-      {/* Spacer para compensar a navbar fixa */}
       <div className="h-20"></div>
 
       {showAboutModal && (

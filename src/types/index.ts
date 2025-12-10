@@ -1,5 +1,3 @@
-// Tipos compartilhados para o projeto MyMusicFy
-
 export type Musica = {
   id: number;
   titulo: string;

@@ -1,5 +1,3 @@
-// Constantes centralizadas do projeto MyMusicFy
-
 export const LIMITS = {
   MUSICAS_POR_PAGINA: 100,
   PLAYLISTS_POR_PAGINA: 50,
@@ -23,14 +21,14 @@ export const ROUTES = {
 } as const;
 
 export const CACHE_TIMES = {
-  YOUTUBE_SEARCH: 300, // 5 minutos
-  USER_DATA: 60, // 1 minuto
-  PLAYLIST_DATA: 120, // 2 minutos
+  YOUTUBE_SEARCH: 300,
+  USER_DATA: 60,
+  PLAYLIST_DATA: 120,
 } as const;
 
 export const DEBOUNCE_DELAYS = {
-  SEARCH: 500, // 500ms
-  INPUT: 300, // 300ms
+  SEARCH: 500,
+  INPUT: 300,
 } as const;
 
 export const MESSAGES = {
@@ -74,4 +72,6 @@ export const IMAGE_DOMAINS = {
   SPOTIFY: ['i.scdn.co', '**.scdn.co', '**.spotifycdn.com', '**.spotify.com'],
   OTHER: ['**.imgur.com', '**.cloudinary.com', '**.githubusercontent.com'],
 } as const;
+
+
 

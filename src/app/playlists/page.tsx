@@ -3,7 +3,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import { criarPlaylist } from "../actions"; // Removido 'apagarPlaylist'
+import { criarPlaylist } from "../actions";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -12,7 +12,6 @@ export default async function PlaylistsPage() {
 
   if (!session?.user?.email) redirect("/login");
 
-  // Buscar playlists do utilizador
   const playlists = await db.playlist.findMany({
     where: { user: { email: session.user.email } },
     include: { _count: { select: { musicas: true } } }, 
@@ -22,14 +21,12 @@ export default async function PlaylistsPage() {
   return (
     <main className="min-h-screen bg-gray-950 text-white selection:bg-purple-500/30 relative overflow-hidden">
       
-      {/* Efeito de Fundo (Glow Roxo Suave) */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-purple-900/20 blur-[120px] rounded-full pointer-events-none -z-10" />
 
       <Navbar user={session.user} />
 
       <div className="max-w-6xl mx-auto p-6 space-y-12">
         
-        {/* Cabeçalho e Formulário de Criação */}
         <div className="flex flex-col md:flex-row items-end justify-between gap-6 border-b border-white/5 pb-8">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent animate-gradient-text pb-2">
@@ -38,7 +35,6 @@ export default async function PlaylistsPage() {
             <p className="text-gray-400 mt-2">Organize a banda sonora da sua vida.</p>
           </div>
 
-          {/* Card de Criar (Estilo Vidro) */}
           <div className="w-full md:w-auto bg-gray-900/60 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-xl">
             <form action={criarPlaylist} className="flex gap-3">
               <input type="hidden" name="emailUser" value={session.user.email} />
@@ -55,7 +51,6 @@ export default async function PlaylistsPage() {
           </div>
         </div>
 
-        {/* Grid de Playlists */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {playlists.map((playlist) => (
             <Link 
@@ -63,7 +58,6 @@ export default async function PlaylistsPage() {
               key={playlist.id}
               className="group relative bg-gray-900/40 border border-white/5 hover:border-purple-500/50 p-5 rounded-2xl transition-all duration-300 hover:bg-gray-800/60 hover:shadow-2xl hover:shadow-purple-500/10 hover:-translate-y-1 block"
             >
-              {/* Capa da Playlist (Placeholder) */}
               <div className="aspect-square w-full bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center mb-4 group-hover:scale-105 transition duration-500 shadow-inner border border-white/5 overflow-hidden relative">
                 {playlist.capa ? (
                   <Image 
@@ -78,7 +72,6 @@ export default async function PlaylistsPage() {
                 )}
               </div>
 
-              {/* Informações */}
               <div>
                 <h3 className="text-lg font-bold text-white truncate group-hover:text-purple-400 transition">{playlist.nome}</h3>
                 <p className="text-gray-500 text-xs mt-1 flex items-center gap-2 uppercase tracking-wider font-medium">
@@ -88,7 +81,6 @@ export default async function PlaylistsPage() {
             </Link>
           ))}
 
-          {/* Estado Vazio */}
           {playlists.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-500 border-2 border-dashed border-gray-800 rounded-3xl bg-gray-900/20">
               <div className="text-5xl mb-4 opacity-30 grayscale">📂</div>

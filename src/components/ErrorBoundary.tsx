@@ -49,7 +49,6 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-4">
           <div className="max-w-md w-full text-center space-y-6">
-            {/* Ícone de Erro */}
             <div className="flex justify-center">
               <div className="w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center border-2 border-red-500/20">
                 <svg
@@ -69,7 +68,6 @@ export class ErrorBoundary extends Component<Props, State> {
               </div>
             </div>
 
-            {/* Título */}
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">
                 Ops! Algo deu errado
@@ -79,7 +77,6 @@ export class ErrorBoundary extends Component<Props, State> {
               </p>
             </div>
 
-            {/* Detalhes do Erro (apenas em desenvolvimento) */}
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-left">
                 <p className="text-red-400 text-sm font-mono break-all">
@@ -98,7 +95,6 @@ export class ErrorBoundary extends Component<Props, State> {
               </div>
             )}
 
-            {/* Ações */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={this.handleReset}
@@ -114,7 +110,6 @@ export class ErrorBoundary extends Component<Props, State> {
               </Link>
             </div>
 
-            {/* Link de Suporte */}
             <p className="text-gray-500 text-sm">
               Se o problema persistir, entre em contato com o suporte.
             </p>

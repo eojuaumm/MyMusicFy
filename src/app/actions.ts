@@ -4,8 +4,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { hash } from "bcryptjs";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth"; // Importar para pegar a sessão
-import { authOptions } from "./api/auth/[...nextauth]/route"; // Importar as opções de auth
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 import type { VideoYoutube, ResultadoBusca, ActionResponse } from "@/types";
 
@@ -16,7 +16,6 @@ export async function buscarVideosYoutube(termo: string): Promise<ResultadoBusca
     return [];
   }
 
-  // Validação do termo de busca
   if (!termo || termo.trim().length === 0) {
     return [];
   }
@@ -25,7 +24,7 @@ export async function buscarVideosYoutube(termo: string): Promise<ResultadoBusca
   
   try {
     const res = await fetch(url, {
-      next: { revalidate: 300 } // Cache por 5 minutos
+      next: { revalidate: 300 }
     });
     
     if (!res.ok) {
@@ -64,20 +63,16 @@ export async function buscarVideosYoutube(termo: string): Promise<ResultadoBusca
 
 export async function salvarMusicaEscolhida(video: ResultadoBusca) {
   try {
-    // 1. Pegar a sessão do utilizador
     const session = await getServerSession(authOptions);
     
-    // Se não estiver logado, não faz nada (segurança)
     if (!session?.user?.email) {
       throw new Error("Não autorizado");
     }
 
-    // Validar dados básicos
     if (!video?.titulo || !video?.previewUrl) {
       throw new Error("Dados do vídeo inválidos");
     }
 
-    // Verificar se a música já existe para evitar duplicatas
     const musicaExistente = await db.musica.findFirst({
       where: {
         previewUrl: video.previewUrl,
@@ -91,13 +86,12 @@ export async function salvarMusicaEscolhida(video: ResultadoBusca) {
 
     await db.musica.create({
       data: {
-        titulo: String(video.titulo).slice(0, 200), // Limitar tamanho
+        titulo: String(video.titulo).slice(0, 200),
         artista: String(video.canal || "Desconhecido").slice(0, 100),
         album: "YouTube",
         ano: video.ano || null,
         capaUrl: video.capaUrl || null,
         previewUrl: video.previewUrl,
-        // 2. Conectar a música ao utilizador logado pelo email
         user: { 
           connect: { email: session.user.email } 
         }
@@ -118,7 +112,6 @@ export async function registrarUsuario(formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    // Validação básica
     if (!nome || nome.trim().length < 2) {
       throw new Error("Nome deve ter pelo menos 2 caracteres");
     }
@@ -140,8 +133,8 @@ export async function registrarUsuario(formData: FormData) {
 
     await db.user.create({
       data: { 
-        nome: nome.trim().slice(0, 50), // Limitar tamanho
-        email: email.toLowerCase().trim(), // Normalizar email
+        nome: nome.trim().slice(0, 50),
+        email: email.toLowerCase().trim(),
         password: passwordHash 
       }
     });
@@ -159,7 +152,6 @@ export async function removerMusica(id: number) {
     throw new Error("Não autorizado");
   }
 
-  // Verificar se a música pertence ao usuário
   const musica = await db.musica.findFirst({
     where: { 
       id,
@@ -181,7 +173,6 @@ export async function toggleFavorito(id: number) {
     throw new Error("Não autorizado");
   }
 
-  // Verificar se a música pertence ao usuário
   const musica = await db.musica.findFirst({
     where: { 
       id,
@@ -217,7 +208,6 @@ export async function atualizarPerfil(formData: FormData) {
   }
 
   try {
-    // Validação básica
     if (nome && nome.trim().length < 2) {
       throw new Error("Nome deve ter pelo menos 2 caracteres");
     }
@@ -226,7 +216,6 @@ export async function atualizarPerfil(formData: FormData) {
       throw new Error("Senha deve ter pelo menos 6 caracteres");
     }
 
-    // Validar URL de imagem se fornecida
     if (imagem && imagem.trim().length > 0) {
       try {
         new URL(imagem);
@@ -281,7 +270,6 @@ export async function adicionarMusica(formData: FormData) {
     const album = formData.get("album") as string;
     const ano = formData.get("ano") as string;
 
-    // Validação
     if (!titulo || titulo.trim().length === 0) {
       throw new Error("Título é obrigatório");
     }
@@ -294,14 +282,12 @@ export async function adicionarMusica(formData: FormData) {
       throw new Error("URL de preview é obrigatória");
     }
 
-    // Validar URL
     try {
       new URL(previewUrl);
     } catch {
       throw new Error("URL de preview inválida");
     }
 
-    // Verificar se a música já existe
     const musicaExistente = await db.musica.findFirst({
       where: {
         previewUrl: previewUrl.trim(),
@@ -350,7 +336,6 @@ export async function criarPlaylist(formData: FormData) {
   }
 
   try {
-    // Validação
     if (!nome || nome.trim().length === 0) {
       throw new Error("Nome da playlist é obrigatório");
     }
@@ -409,7 +394,6 @@ export async function adicionarMusicaNaPlaylist(musicaId: number, playlistId: nu
   }
 
   try {
-    // Verificar se a música pertence ao usuário
     const musica = await db.musica.findFirst({
       where: { 
         id: musicaId,
@@ -421,7 +405,6 @@ export async function adicionarMusicaNaPlaylist(musicaId: number, playlistId: nu
       throw new Error("Música não encontrada ou você não tem permissão");
     }
 
-    // Verificar se a playlist pertence ao usuário
     const playlist = await db.playlist.findFirst({
       where: { 
         id: playlistId,
@@ -433,7 +416,6 @@ export async function adicionarMusicaNaPlaylist(musicaId: number, playlistId: nu
       throw new Error("Playlist não encontrada ou você não tem permissão");
     }
 
-    // Verificar se a música já está na playlist
     const jaExiste = await db.playlist.findFirst({
       where: {
         id: playlistId,
@@ -472,7 +454,6 @@ export async function alternarPlano(email: string) {
     throw new Error("Não autorizado");
   }
 
-  // Verificar se o email da sessão corresponde ao email passado
   if (session.user.email !== email) {
     throw new Error("Você não tem permissão para alterar este plano");
   }
@@ -512,7 +493,6 @@ export async function atualizarPlaylist(formData: FormData) {
     throw new Error("ID da playlist inválido");
   }
 
-  // Verificar se a playlist pertence ao usuário
   const playlist = await db.playlist.findFirst({
     where: { 
       id,

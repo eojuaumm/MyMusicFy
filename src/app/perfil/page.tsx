@@ -32,7 +32,6 @@ export default async function PerfilPage() {
 
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-2xl">
           
-          {/* Avatar */}
           <div className="flex justify-center mb-8">
             <div className="w-32 h-32 rounded-full border-4 border-blue-500/30 overflow-hidden bg-gray-800 flex items-center justify-center relative group">
               {usuario.imagem ? (
@@ -50,10 +49,8 @@ export default async function PerfilPage() {
           </div>
 
           <form action={atualizarPerfil} className="flex flex-col gap-6">
-            {/* Hidden Email para identificação */}
             <input type="hidden" name="emailAtual" value={usuario.email} />
 
-            {/* Info Pública */}
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-blue-400 uppercase tracking-wider border-b border-gray-800 pb-2">Informações Públicas</h3>
               
@@ -78,7 +75,6 @@ export default async function PerfilPage() {
               </div>
             </div>
 
-            {/* Segurança */}
             <div className="space-y-4 mt-4">
               <h3 className="text-sm font-bold text-purple-400 uppercase tracking-wider border-b border-gray-800 pb-2">Segurança</h3>
               
@@ -108,7 +104,6 @@ export default async function PerfilPage() {
 
           </form>
 
-          {/* Plano */}
           <div className="mt-12 pt-8 border-t border-gray-800">
             <div className="flex items-center justify-between">
               <div>
@@ -120,7 +115,6 @@ export default async function PerfilPage() {
                 </p>
               </div>
               
-              {/* Botão Alternar Plano */}
               <form action={alternarPlano.bind(null, usuario.email)}>
                 <button 
                   type="submit"

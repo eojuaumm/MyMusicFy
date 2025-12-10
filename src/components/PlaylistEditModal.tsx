@@ -14,7 +14,6 @@ export default function PlaylistEditModal({ playlist, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       
-      {/* Overlay para fechar */}
       <div className="absolute inset-0" onClick={onClose}></div>
 
       <div className="relative bg-gray-900 border border-white/10 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden p-6 animate-in zoom-in-95">
@@ -68,7 +67,6 @@ export default function PlaylistEditModal({ playlist, onClose }: Props) {
           </div>
         </form>
 
-        {/* Área de Perigo */}
         <div className="mt-6 pt-6 border-t border-white/5">
           <h3 className="text-xs font-bold text-red-400 uppercase mb-2">Zona de Perigo</h3>
           <form action={apagarPlaylist.bind(null, playlist.id)}>

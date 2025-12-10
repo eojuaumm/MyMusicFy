@@ -5,7 +5,6 @@ export default function RegistrarPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-950 p-4 relative overflow-hidden selection:bg-pink-500/30">
       
-      {/* Fundo (Glow Roxo/Rosa) */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative w-full max-w-md bg-gray-900/80 backdrop-blur-xl p-8 rounded-2xl border border-purple-500/20 shadow-2xl z-10">
@@ -15,7 +14,6 @@ export default function RegistrarPage() {
             <span className="group-hover:-translate-x-1 transition">←</span> Voltar ao início
           </Link>
           
-          {/* Título Roxo/Rosa */}
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent animate-gradient-text pb-2">
             Criar Conta
           </h1>
